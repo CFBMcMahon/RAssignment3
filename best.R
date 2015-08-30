@@ -44,7 +44,9 @@ best <- function(state, outcome) {
 	{
 		lowest <- c(lowest, data$Hospital.Name[i])
 	}		
-	order(lowest)
+	lowest <- lowest[order(lowest)]
+	lowest
+	
 }
 
 justFrame <- function(state, outcome) {
