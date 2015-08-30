@@ -50,7 +50,7 @@ best <- function(state, outcome) {
 		lowestNames <- c(lowestNames, data$Hospital.Name[i])
 	}		
 	lowestNames <- lowestNames[order(lowestNames)]
-	lowestNames
+	lowestNames[1]
 	
 }
 
