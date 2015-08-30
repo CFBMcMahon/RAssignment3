@@ -6,56 +6,62 @@ rankhospital <- function(state, outcome, num = "best") {
 	data <- read.csv(outcomefilename, colClasses = "character")
 	inState <- data[which(data$State == state, ), ]
 	output <- NULL
+	outputNames <- NULL
+	outputRates <- NULL
 	if(outcome == "heart attack")
 	{
 		heartAttacks <- as.numeric(inState$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack)
 		output <- inState[which(!is.na(heartAttacks)), ]
-		output <- output[order(as.numeric(output$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack)), ]
-		c(output$Hospital.Name, as.numeric(output$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack))
+		outputNames <- output$Hospital.Names
+		outputRates <- output$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack
 	} else if(outcome == "heart failure") {
 		heartFailures <- as.numeric(inState$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure)
 		output <- inState[which(!is.na(heartFailures)), ]
-		output <- output[order(as.numeric(output$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure)), ]
-		c(output$Hospital.Name, as.numeric(output$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure))
+		outputNames <- output$Hospital.Names
+		outputRates <- output$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure
 	} else if(outcome == "pneumonia"){
 		pneumonias <- as.numeric(inState$Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia)
 		output <- inState[which(!is.na(Pneumonias)), ]
-		output <- output[order(as.numeric(output$Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia)), ]
-		c(output$Hospital.Name, as.numeric(output$Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia))
+		outputNames <- output$Hospital.Names
+		outputRates <- output$Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia
 	} else {
 		stop("invalid outcome")
 	}
-
-	#get rank
-	if(num == "best")
-	{
-		rank <- 1
-	} else if(num == "worst") {
-		rank <- length(output$Hospital.Name)
-	} else if(is.numeric(num)) {
-		if(num > length(inState) | num < 1)
-		{
-			return(NA)
-		} else {
-			rank <- num
-		}
-	} else {
-		
-	}
-	for(i in 2:length(output))
-	{
-		beforename <- output[1, i - 1]
-		beforedeathrate <- output[2, i - 1]
-		currentname <- output[1, i]
-		currentdeathrate <- output[2, i] 
-		if(beforedeathrate == currentdeathrate){
-			if(order(c(beforename,  currentname))[1] != 1){
-				output[1, i - 1] <- currentname
-				output[1, i] <- beforename 
-			}
-		}
-	}
-	output
+#	
+#	#get rank
+#	if(num == "best")
+#	{
+#		rank <- 1
+#	} else if(num == "worst") {
+#		rank <- length(output$Hospital.Name)
+#	} else if(is.numeric(num)) {
+#		if(num > length(inState) | num < 1)
+#		{
+#			return(NA)
+#		} else {
+#			rank <- num
+#		}
+#	} else {
+#		
+#	}
+#	print(outputNames[1])
+#	print(outputNames[2])
+#	for(i in 2:length(outputNames))
+#	{
+#		print(i)
+#		beforename <- outputNames[i - 1]
+#		print(beforename)
+#		beforedeathrate <- outputRates[i - 1]
+#		currentname <- outputNames[i]
+#		currentdeathrate <- outputRates[i] 
+#		if(beforedeathrate == currentdeathrate){
+#			if(order(c(beforename, currentname))[1] != 1){
+#				outputNames[i - 1] <- currentname
+#				outputNames[i] <- beforename 
+#			}
+#		}
+#	}
+#	output[, rank]
 }
 
 justFrame <- function(state, outcome) {
