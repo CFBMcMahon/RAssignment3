@@ -4,13 +4,26 @@ outcomefilename <- "outcome-of-care-measures.csv"
 
 rankhospital <- function(state, outcome, num = "best") {
 	rank <- NULL
+	data <- read.csv(outcomefilename, colClasses = "character")
+	inState <- data[which(data$State == state), ]
 	if(num == "best")
 	{
 		rank <- 1
+	} else if(num == "worst") {
+		rank <- length(inState)
+	} else if(is.numeric(num)) {
+		if(num > length(instate) | num < 1)
+		{
+			return(NA)
+		} else {
+			rank <- num
+		}
+	} else {
+		
 	}
-	data <- read.csv(outcomefilename, colClasses = "character")
-	inState <- data[which(data$State == state), ]
+		
 	ranked <- NULL	
+	
 	if(!dim(checkIfStateExists)[1]) { stop("invalid state") }
 	if(outcome == "heart attack")
 	{
@@ -22,7 +35,7 @@ rankhospital <- function(state, outcome, num = "best") {
 	} else {
 		stop("invalid outcome")
 	}
-	ranked
+	ranked[rank)
 #	
 #	finalcut <- as.numeric(finalcut)
 #	lowest <- NULL
