@@ -1,18 +1,39 @@
 
 outcomefilename <- "outcome-of-care-measures.csv"
 #outcome can be "heart attack", "heart failure" and "pneumonia".
-
 rankhospital <- function(state, outcome, num = "best") {
 	rank <- NULL
 	data <- read.csv(outcomefilename, colClasses = "character")
-	inState <- data[which(data$State == state), ]
+	inState <- data[which(data$State == state, ), ]
+	output <- NULL
+	if(outcome == "heart attack")
+	{
+		heartAttacks <- as.numeric(inState$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack)
+		output <- inState[which(!is.na(heartAttacks)), ]
+		output <- output[order(as.numeric(output$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack)), ]
+		c(output$Hospital.Name, as.numeric(output$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack))
+	} else if(outcome == "heart failure") {
+		heartFailures <- as.numeric(inState$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure)
+		output <- inState[which(!is.na(heartFailures)), ]
+		output <- output[order(as.numeric(output$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure)), ]
+		c(output$Hospital.Name, as.numeric(output$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure))
+	} else if(outcome == "pneumonia"){
+		pneumonias <- as.numeric(inState$Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia)
+		output <- inState[which(!is.na(Pneumonias)), ]
+		output <- output[order(as.numeric(output$Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia)), ]
+		c(output$Hospital.Name, as.numeric(output$Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia))
+	} else {
+		stop("invalid outcome")
+	}
+
+	#get rank
 	if(num == "best")
 	{
 		rank <- 1
 	} else if(num == "worst") {
-		rank <- length(inState)
+		rank <- length(output$Hospital.Name)
 	} else if(is.numeric(num)) {
-		if(num > length(instate) | num < 1)
+		if(num > length(inState) | num < 1)
 		{
 			return(NA)
 		} else {
@@ -21,57 +42,20 @@ rankhospital <- function(state, outcome, num = "best") {
 	} else {
 		
 	}
-		
-	ranked <- NULL	
-	
-	if(!dim(checkIfStateExists)[1]) { stop("invalid state") }
-	if(outcome == "heart attack")
+	for(i in 2:length(output))
 	{
-		ranked <- checkIfStateExists[order(as.numeric(inState$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack)), ]
-	} else if(outcome == "heart failure") {
-		ranked <- checkIfStateExists[order(as.numeric(inState$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure)), ]
-	} else if(outcome == "pneumonia") {
-		ranked <- checkIfStateExists[order(as.numeric(inState$Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia)), ]
-	} else {
-		stop("invalid outcome")
+		beforename <- output[1, i - 1]
+		beforedeathrate <- output[2, i - 1]
+		currentname <- output[1, i]
+		currentdeathrate <- output[2, i] 
+		if(beforedeathrate == currentdeathrate){
+			if(order(c(beforename,  currentname))[1] != 1){
+				output[1, i - 1] <- currentname
+				output[1, i] <- beforename 
+			}
+		}
 	}
-	ranked[rank)
-#	
-#	finalcut <- as.numeric(finalcut)
-#	lowest <- NULL
-#	indices <- NULL
-#	for(i in 1:length(finalcut))
-#	{
-#		if(!is.na(finalcut[i])) {
-#			rowState <- data$State[i]
-#			rowRate <- finalcut[i]
-#			if(rowState == state){
-#				if(is.null(lowest))
-#				{
-#					lowest <- rowRate
-#					indices <- c(i)
-#				} else {
-#					if(rowRate < lowest)
-#					{
-#						lowest <- rowRate
-#						indices <- c(i)
-#					} else if(rowRate == lowest){
-#						indices <- c(indices, i)
-#					} else {
-#	
-#					}	
-#				}
-#			}
-#		}
-#	}
-#	lowestNames <- c()
-#	for(i in indices)
-#	{
-#		lowestNames <- c(lowestNames, data$Hospital.Name[i])
-#	}		
-#	lowestNames <- lowestNames[order(lowestNames)]
-#	lowestNames[1]
-	
+	output
 }
 
 justFrame <- function(state, outcome) {
