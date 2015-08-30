@@ -4,10 +4,10 @@ outcomefilename <- "outcome-of-care-measures.csv"
 
 best <- function(state, outcome) {
 	data <- read.csv(outcomefilename, colClasses = "character")
-	#frame <- data[which(data$State == state), ]
+	checkIfStateExists <- data[which(data$State == state), ]
 	indices <- c(-1)
 	finalcut <- NULL
-	if(!dim(frame)[1]) { stop("invalid state") }
+	if(!dim(checkIfStateExists)[1]) { stop("invalid state") }
 	if(outcome == "heart attack")
 	{
 		#attackfinalcut <- data$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack		
@@ -39,13 +39,12 @@ best <- function(state, outcome) {
 					
 		}
 	}
-	
 	lowest <- c()
 	for(i in indices)
 	{
-		lowest <- c(lowest, frame$Hospital.Name[indices[i]])
+		lowest <- c(lowest, data$Hospital.Name[i])
 	}		
-	lowest
+	order(lowest)
 }
 
 justFrame <- function(state, outcome) {
