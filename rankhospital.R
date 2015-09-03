@@ -5,47 +5,56 @@ rankhospital <- function(state, outcome, num = "best") {
 	rank <- NULL
 	data <- read.csv(outcomefilename, colClasses = "character")
 	inState <- data[which(data$State == state, ), ]
-	output <- NULL
-	outputNames <- NULL
-	outputRates <- NULL
-	if(outcome == "heart attack")
+	if(dim(inState)[2] < 1)
 	{
-		heartAttacks <- as.numeric(inState$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack)
-		output <- inState[which(!is.na(heartAttacks)), ]
-		outputNames <- output$Hospital.Names
-		outputRates <- output$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack
-	} else if(outcome == "heart failure") {
-		heartFailures <- as.numeric(inState$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure)
-		output <- inState[which(!is.na(heartFailures)), ]
-		outputNames <- output$Hospital.Names
-		outputRates <- output$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure
-	} else if(outcome == "pneumonia"){
-		pneumonias <- as.numeric(inState$Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia)
-		output <- inState[which(!is.na(Pneumonias)), ]
-		outputNames <- output$Hospital.Names
-		outputRates <- output$Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia
-	} else {
-		stop("invalid outcome")
+		return(NA)
 	}
-#	
-#	#get rank
-#	if(num == "best")
+	print("point: 1")
+	
+	columnName <- if(outcome == "heart attack")
+	{
+		"Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack"
+	} else if(outcome == "heart failure") {
+		"Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure"
+	} else if(outcome == "pneumonia") {
+		"Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia"
+	} else {
+		NA
+	}
+	if(is.na(columnName))
+	{
+		return (NA)
+	}
+
+	#na.last
+	str(inState[columnName])
+	return(inState[columnName])
+	
+#	print("checkpoint1")
+#	return(order(inState[columnName, ], as.factor(inState[columnName, ])))
+}
+
+#if(outcome == "heart attack")
 #	{
-#		rank <- 1
-#	} else if(num == "worst") {
-#		rank <- length(output$Hospital.Name)
-#	} else if(is.numeric(num)) {
-#		if(num > length(inState) | num < 1)
-#		{
-#			return(NA)
-#		} else {
-#			rank <- num
-#		}
+#		heartAttacks <- as.numeric(inState$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack)
+#		output <- inState[which(!is.na(heartAttacks)), ]
+#		outputNames <- output$Hospital.Names
+#		outputRates <- output$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack
+#	} else if(outcome == "heart failure") {
+#		heartFailures <- as.numeric(inState$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure)
+#		output <- inState[which(!is.na(heartFailures)), ]
+#		outputNames <- output$Hospital.Names
+#		outputRates <- output$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure
+#	} else if(outcome == "pneumonia"){
+#		pneumonias <- as.numeric(inState$Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia)
+#		output <- inState[which(!is.na(Pneumonias)), ]
+#		outputNames <- output$Hospital.Names
+#		outputRates <- output$Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia
 #	} else {
-#		
+#		stop("invalid outcome")
 #	}
-#	print(outputNames[1])
-#	print(outputNames[2])
+#	
+	#get rank
 #	for(i in 2:length(outputNames))
 #	{
 #		print(i)
@@ -62,7 +71,7 @@ rankhospital <- function(state, outcome, num = "best") {
 #		}
 #	}
 #	output[, rank]
-}
+
 
 justFrame <- function(state, outcome) {
 	data <- read.csv(outcomefilename, colClasses = "character")

@@ -1,0 +1,7 @@
+1. Read hospital file
+2. subset hopsital data down to required state
+3. Check if state was real by whether subset contains any values
+4. Same with outcome.
+5. order state subset by outcome
+6. Split by outcome and order each split by Hospital name.
+7. Put back together and then place new column on data frame 
