@@ -13,22 +13,22 @@ rankhospital <- function(state, outcome, num = "best") {
 	factorOrder <- NULL
 	if(outcome == "heart attack")
 	{
-		factorOrder <- inState$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack
+		inState <- inState[order(as.numeric(inState$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack), inState$Hospital.Name), ]
 	} else if(outcome == "heart failure") {
-		factorOrder <- inState$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure
+		inState <- inState[order(as.numeric(inState$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure), inState$Hospital.Name) , ]
 	} else if(outcome == "pneumonia") {
-		factorOrder <- inState$Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia
+		inState <- inState[order(as.numeric(inState$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Pneumonia), inState$Hospital.Name), ]
 	} else {
 		NA
 	}
-	if(!nrows(factorOrder))
+	if(nrow(factorOrder))
 	{
 		return (NA)
 	}
 
 	#na.last
 	
-	return(factorOrder)
+	return(inState)
 	
 #	print("checkpoint1")
 #	return(order(inState[columnName, ], as.factor(inState[columnName, ])))
