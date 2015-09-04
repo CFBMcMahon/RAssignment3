@@ -14,16 +14,16 @@ rankhospital <- function(state, outcome, num = "best") {
 	if(outcome == "heart attack")
 	{
 		inState <- inState[order(as.numeric(inState$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack), inState$Hospital.Name), ]
+		inState <- inState[which(inState$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack != "Not Available"), ]
+		#datum[which(datum$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack != "Not Available"), ]
 	} else if(outcome == "heart failure") {
 		inState <- inState[order(as.numeric(inState$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure), inState$Hospital.Name) , ]
+		inState <- inState[which(inState$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure != "Not Available"), ]
 	} else if(outcome == "pneumonia") {
-		inState <- inState[order(as.numeric(inState$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Pneumonia), inState$Hospital.Name), ]
+		inState <- inState[order(as.numeric(inState$Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia), inState$Hospital.Name), ]
+		inState <- inState[which(inState$Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia != "Not Available"), ]
 	} else {
 		NA
-	}
-	if(nrow(factorOrder))
-	{
-		return (NA)
 	}
 
 	#na.last
