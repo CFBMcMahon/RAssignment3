@@ -7,9 +7,9 @@ rankhospital <- function(state, outcome, num = "best") {
 	inState <- data[which(data$State == state, ), ]
 	if(nrow(inState) < 1)
 	{
-		return(NA)
+		stop("invalid state")
 	}
-	print("point: 1")
+
 	factorOrder <- NULL
 	if(outcome == "heart attack")
 	{
@@ -23,15 +23,27 @@ rankhospital <- function(state, outcome, num = "best") {
 		inState <- inState[order(as.numeric(inState$Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia), inState$Hospital.Name), ]
 		inState <- inState[which(inState$Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia != "Not Available"), ]
 	} else {
-		NA
+		stop("invalid outcome")
 	}
 
 	#na.last
+	if(is.numeric(num)){
+		rank <- num
+		if(num > nrow(inState))
+		{
+			return(NA)
+		}
+	} else if(is.character(num)){
+		if(num == "best") {
+			rank <- 1
+		} else if(num == "worst"){
+			rank <- nrow(inState)
+		}
+	} else {
+		stop("invalid rank")
+	}
+	return(inState$Hospital.Name[rank])
 	
-	return(inState)
-	
-#	print("checkpoint1")
-#	return(order(inState[columnName, ], as.factor(inState[columnName, ])))
 }
 
 #if(outcome == "heart attack")
