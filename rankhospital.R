@@ -5,30 +5,30 @@ rankhospital <- function(state, outcome, num = "best") {
 	rank <- NULL
 	data <- read.csv(outcomefilename, colClasses = "character")
 	inState <- data[which(data$State == state, ), ]
-	if(dim(inState)[2] < 1)
+	if(nrow(inState) < 1)
 	{
 		return(NA)
 	}
 	print("point: 1")
-	
-	columnName <- if(outcome == "heart attack")
+	factorOrder <- NULL
+	if(outcome == "heart attack")
 	{
-		"Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack"
+		factorOrder <- inState$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack
 	} else if(outcome == "heart failure") {
-		"Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure"
+		factorOrder <- inState$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure
 	} else if(outcome == "pneumonia") {
-		"Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia"
+		factorOrder <- inState$Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia
 	} else {
 		NA
 	}
-	if(is.na(columnName))
+	if(!nrows(factorOrder))
 	{
 		return (NA)
 	}
 
 	#na.last
-	str(inState[columnName])
-	return(inState[columnName])
+	
+	return(factorOrder)
 	
 #	print("checkpoint1")
 #	return(order(inState[columnName, ], as.factor(inState[columnName, ])))
